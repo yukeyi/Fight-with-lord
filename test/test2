@@ -1,0 +1,18 @@
+from keras.models import Sequential
+from keras.layers.core import Dense, Activation
+from keras.layers import LSTM, Embedding
+import numpy as np
+
+model = Sequential()
+model.add(Embedding(1000, 64, input_length=10))
+model.add(LSTM(1, input_dim=5, input_length=10, return_sequences=True, activation='sigmoid'))
+# the model will take as input an integer matrix of size (batch, input_length).
+# the largest integer (i.e. word index) in the input should be no larger than 999 (vocabulary size).
+# now model.output_shape == (None, 10, 64), where None is the batch dimension.
+
+input_array = np.random.randint(1000, size=(32, 10))
+
+model.compile('rmsprop', 'mse')
+output_array = model.predict(input_array)
+#assert output_array.shape == (32, 10, 64)
+print(output_array.shape)
